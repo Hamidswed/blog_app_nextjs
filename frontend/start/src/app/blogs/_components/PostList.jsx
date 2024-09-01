@@ -3,13 +3,11 @@ import CoverImage from "./CoverImage";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Author from "./Author";
 import PostInteraction from "./PostInteraction";
+import { getPosts } from "@/services/postServices";
 
 async function PostList() {
   // await new Promise((res) => setTimeout(() => res(), 3000));
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/post/list`);
-  const {
-    data: { posts },
-  } = await res.json();
+const posts = await getPosts()
   
   return posts.length > 0 ? (
     <div className="grid grid-cols-12 gap-8">
@@ -44,4 +42,3 @@ async function PostList() {
 }
 
 export default PostList;
-//64

@@ -1,6 +1,13 @@
-import { getPostBySlug } from "@/services/postServices";
+import { getPostBySlug, getPosts } from "@/services/postServices";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+
+export async function generateStaticParams() {
+  //in slug we have dynamic page, to make it static we use this function
+  const posts = await getPosts();
+  const slugs = posts.map((post) => ({ postSlug: post.slug }));
+  return slugs;
+}
 
 export async function generateMetadata({ params }) {
   const post = await getPostBySlug(params.postSlug);
