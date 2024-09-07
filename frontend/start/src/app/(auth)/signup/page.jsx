@@ -8,6 +8,8 @@ import * as yup from "yup";
 import { signUpApi } from "@/services/authService";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { SpinnerMini } from "@/ui/Spinner";
 
 // export const metadata = {
 //   title: "ثبت نام",
@@ -36,19 +38,11 @@ function Signup() {
     mode: "onTouched",
   });
 
-  const router = useRouter()
+  const router = useRouter();
+  const { signup } = useAuth();
 
   const onSubmit = async (values) => {
-    try {
-      const { user, message } = await signUpApi(values);
-      console.log(user, message);
-      toast.success(message)
-      reset();
-      router.push("/profile")
-    } catch (error) {
-      toast.error(error?.response?.data?.message)
-      console.log(error?.response?.data?.message);
-    }
+    await signup(values);
   };
 
   return (
@@ -81,12 +75,18 @@ function Signup() {
           errors={errors}
           isRequired
         />
-        <Button variant="primary" type="submit" className="w-full">
-          تایید
-        </Button>
+        <div className="flex justify-center">
+          {isLoading ? (
+            <SpinnerMini />
+          ) : (
+            <Button variant="primary" type="submit" className="w-full">
+              تایید
+            </Button>
+          )}
+        </div>
       </form>
     </div>
   );
 }
 
-export default Signup;
+export default Signup; //82
