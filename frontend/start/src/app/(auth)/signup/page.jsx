@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { SpinnerMini } from "@/ui/Spinner";
+import Link from "next/link";
 
 // export const metadata = {
 //   title: "ثبت نام",
@@ -85,8 +86,11 @@ function Signup() {
           )}
         </div>
       </form>
+      <Link href="/signup" className="text-secondary-500 mt-6 text-center">
+        ثبت نام
+      </Link>
     </div>
   );
 }
 
-export default Signup; 
+export default Signup;
