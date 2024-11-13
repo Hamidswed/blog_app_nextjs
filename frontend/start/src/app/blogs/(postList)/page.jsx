@@ -1,16 +1,17 @@
-import { Suspense } from "react";
 import PostList from "../_components/PostList";
-import Loading from "../loading";
+import { cookies } from "next/headers";
+import setCookieOnReq from "@/utils/setCookieOnReq";
+import { getPosts } from "@/services/postServices";
+import queryString from "query-string";
 
-async function BlogsPage() {
+async function BlogsPage({ searchParams }) {
+  const queries = queryString.stringify(searchParams);
+  const cookieStore = cookies();
+  const options = setCookieOnReq(cookieStore);
+  const posts = await getPosts(queries, options);
   return (
     <div>
-      <p className="text-secondary-500 mb-4">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor, eius
-      </p>
-      <Suspense fallback={<Loading />}>
-        <PostList />
-      </Suspense>
+      <PostList posts={posts} />
     </div>
   );
 }

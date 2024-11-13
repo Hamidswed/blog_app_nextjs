@@ -3,20 +3,15 @@ import CoverImage from "./CoverImage";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Author from "./Author";
 import PostInteraction from "./PostInteraction";
-import { getPosts } from "@/services/postServices";
-import { cookies } from "next/headers";
-import setCookieOnReq from "@/utils/setCookieOnReq";
 
-async function PostList() {
-  
-  const cookieStore = cookies()
-  const options = setCookieOnReq(cookieStore)
-  const posts = await getPosts(options)
-  
+async function PostList({ posts }) {
   return posts.length > 0 ? (
     <div className="grid grid-cols-12 gap-8">
       {posts.map((post) => (
-        <div key={post._id} className="col-span-12 sm:col-span-6 lg:col-span-4 border border-secondary-300 p-2 rounded-lg">
+        <div
+          key={post._id}
+          className="col-span-12 sm:col-span-6 lg:col-span-4 border border-secondary-300 p-2 rounded-lg"
+        >
           <CoverImage {...post} />
 
           {/* post content */}
