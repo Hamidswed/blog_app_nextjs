@@ -32,6 +32,7 @@ class PostController extends Controller {
         { title: searchTerm },
         { slug: searchTerm },
         { briefText: searchTerm },
+        { text: searchTerm },
       ];
     }
 
