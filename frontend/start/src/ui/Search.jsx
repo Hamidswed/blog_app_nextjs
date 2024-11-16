@@ -27,7 +27,7 @@ function Search() {
       <input
         type="text"
         name="search"
-        placeholder="جتسجو..."
+        placeholder="جستجو..."
         autoComplete="off"
         className="textField__input py-3 text-xs bg-secondary-0"
       />

@@ -21,7 +21,7 @@ class PostController extends Controller {
   async getAllPosts(req, res) {
     let dbQuery = {};
     const user = req.user;
-    let { q: search, categorySlug, sort, page, limit } = req.query;
+    let { search, categorySlug, sort, page, limit } = req.query;
     page = page || 1;
     limit = limit || 6;
     const skip = (page - 1) * limit;
