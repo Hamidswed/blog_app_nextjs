@@ -1,6 +1,8 @@
 import { getPostBySlug, getPosts } from "@/services/postServices";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import RelatedPost from "../_components/RelatedPost";
+import PostComment from "../_components/comment/PostComment";
 
 export async function generateStaticParams() {
   //in slug we have dynamic page, to make it static we use this function
@@ -36,8 +38,8 @@ async function SinglePost({ params }) {
           src={post.coverImageUrl}
         />
       </div>
-      {/* {post.related.length > 0 ? <RelatedPost posts={post.related} /> : null}
-      <BlogComments post={post} /> */}
+      {post.related.length > 0 && <RelatedPost posts={post.related} />}
+      <PostComment post={post}/>
     </div>
   );
 }
