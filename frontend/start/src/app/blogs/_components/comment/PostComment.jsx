@@ -1,35 +1,38 @@
 "use client";
+
 import { useState } from "react";
 import Comment from "./Comment";
 import { useRouter } from "next/navigation";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 
-import { useAuth } from "@/context/AuthContext";
 import Button from "@/ui/Button";
+import Modal from "@/ui/Modal";
+import CommentForm from "./CommentForm";
+import { useAuth } from "@/context/AuthContext";
 
 function PostComment({ post: { comments, _id: postId } }) {
-  // const { user } = useAuth();
-  // const [isOpen, setOpen] = useState(false);
-  // const [parent, setParent] = useState(null);
-  // const router = useRouter();
+  const { user } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const [parent, setParent] = useState(null);
+  const router = useRouter();
 
-  // const addNewCommentHandler = (parent) => {
-  //   if (!user) {
-  //     router.push(
-  //       {
-  //         pathname: "/signin",
-  //         query: {
-  //           redirect: router.asPath,
-  //         },
-  //       },
-  //       `/signin?redirect=${router.asPath}`
-  //     );
-  //     return;
-  //   }
-  //   setParent(parent);
-  //   setOpen(true);
-  // };
+  const addNewCommentHandler = (parent) => {
+    if (!user) {
+      router.push(
+        {
+          pathname: "/signin",
+          query: {
+            redirect: router.asPath,
+          },
+        },
+        `/signin?redirect=${router.asPath}`
+      );
+      return;
+    }
+    setParent(parent);
+    setIsOpen(true);
+  };
 
   return (
     <div className="mb-10">
@@ -43,18 +46,19 @@ function PostComment({ post: { comments, _id: postId } }) {
           <QuestionMarkCircleIcon className="w-4 ml-2" />
           <span>ثبت نظر جدید</span>
         </Button>
-        {/* <Modal
+        <Modal
           title={parent ? "پاسخ به نظر" : "نظر جدید"}
           description={parent ? parent.user.name : "نظر خود را وارد کنید"}
           open={isOpen}
-          onClose={() => setOpen(false)}
+          onClose={() => setIsOpen(false)}
         >
           <CommentForm
             postId={postId}
+            
             parentId={parent ? parent._id : null}
-            onClose={() => setOpen(false)}
+            onClose={() => setIsOpen(false)}
           />
-        </Modal> */}
+        </Modal>
       </div>
       <div className="space-y-8 post-comments bg-secondary-0 rounded-xl py-6 px-3 lg:px-6 ">
         {comments.length > 0 ? (
@@ -64,7 +68,7 @@ function PostComment({ post: { comments, _id: postId } }) {
                 <div className="border border-secondary-200 rounded-xl p-2 sm:p-4 mb-3">
                   <Comment
                     comment={comment}
-                    // onAddComment={() => addNewCommentHandler(comment)}
+                    onAddComment={() => addNewCommentHandler(comment)}
                   />
                 </div>
                 <div className="post-comments__answer mr-2 sm:mr-8 space-y-3">

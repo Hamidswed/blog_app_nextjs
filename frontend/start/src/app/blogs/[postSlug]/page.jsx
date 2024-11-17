@@ -36,10 +36,13 @@ async function SinglePost({ params }) {
           className="object-cover object-center hover:scale-110 transition-all ease-out duration-300"
           fill
           src={post.coverImageUrl}
+          alt={post.title}
+          priority
+          sizes="auto"
         />
       </div>
       {post.related.length > 0 && <RelatedPost posts={post.related} />}
-      <PostComment post={post}/>
+      <PostComment post={post} />
     </div>
   );
 }
