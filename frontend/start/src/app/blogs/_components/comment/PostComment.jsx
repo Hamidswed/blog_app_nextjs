@@ -54,7 +54,6 @@ function PostComment({ post: { comments, _id: postId } }) {
         >
           <CommentForm
             postId={postId}
-            
             parentId={parent ? parent._id : null}
             onClose={() => setIsOpen(false)}
           />
