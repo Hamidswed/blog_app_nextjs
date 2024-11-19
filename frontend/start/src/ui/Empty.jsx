@@ -1,8 +1,7 @@
-
-function Empty({resourceName}) {
+function Empty({ resourceName }) {
   return (
-    <p className="font-bold text-secondary-700">{resourceName} یافت نشد.</div>
-  )
+    <p className="font-bold text-secondary-700">{resourceName} یافت نشد.</p>
+  );
 }
 
-export default Empty
+export default Empty;
