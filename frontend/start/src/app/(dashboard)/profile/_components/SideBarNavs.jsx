@@ -9,7 +9,7 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const sidebarNavs = [
+const sidebarNavLinks = [
   {
     id: 1,
     title: "داشبورد",
@@ -36,7 +36,7 @@ const sidebarNavs = [
     href: "/profile/categories",
   },
   {
-    id: 4,
+    id: 5,
     title: "کاربران",
     icon: <UsersIcon className="w-5 h-5" />,
     href: "/profile/users",
@@ -47,7 +47,7 @@ export default function SideBarNavs() {
   const router = useRouter();
   return (
     <ul className="space-y-2">
-      {sidebarNavs.map((nav) => {
+      {sidebarNavLinks.map((nav) => {
         return (
           <li key={nav.id}>
             <Link
