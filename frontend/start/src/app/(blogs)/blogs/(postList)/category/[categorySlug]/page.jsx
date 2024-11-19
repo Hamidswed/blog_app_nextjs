@@ -12,7 +12,7 @@ async function Category({ params, searchParams }) {
   )}&categorySlug=${categorySlug}`;
   const cookieStore = cookies();
   const options = setCookieOnReq(cookieStore);
-  const posts = await getPosts(queries, options);
+  const {posts} = await getPosts(queries, options);
   return (
     <div>
       {posts.length === 0 ? (

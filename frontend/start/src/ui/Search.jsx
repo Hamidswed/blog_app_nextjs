@@ -13,7 +13,8 @@ function Search() {
 
     const searchValue = e.target.search.value;
     const newParams = new URLSearchParams(searchParams.toString()); // returns URL contains queries.
-
+    newParams.set("page", "1");
+    
     if (searchValue) {
       newParams.set("search", searchValue);
     } else {

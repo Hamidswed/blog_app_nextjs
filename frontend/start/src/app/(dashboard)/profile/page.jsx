@@ -1,16 +1,20 @@
-import { fetchCardData } from "@/services/data";
-import { Card } from "./_components/Card";
+import { Suspense } from "react";
+import CardsWrapper from "./_components/CardsWrapper";
+import Fallback from "@/ui/Fallback";
+import LatestPosts from "./posts/_/components/LatestPosts";
 
 async function Profile() {
-  const { numberOfUsers, numberOfComments, numberOfPosts } =
-    await fetchCardData();
   return (
     <div>
-      <div className="grid gap-6 md:grid-cols-3 mb-8">
-        <Card title="کاربران" value={numberOfUsers} type="users" />
-        <Card title="نظرات" value={numberOfComments} type="comments" />
-        <Card title="پست ها" value={numberOfPosts} type="posts" />
-      </div>
+      <h1 className="text-xl mb-8 text-secondary-700">داشبورد</h1>
+      <Suspense fallback={<Fallback />}>
+        <CardsWrapper />
+      </Suspense>
+
+      <h2 className="text-xl mb-4 text-secondary-600">آخرین پست ها</h2>
+      <Suspense fallback={<Fallback />}>
+        <LatestPosts />
+      </Suspense>
     </div>
   );
 }

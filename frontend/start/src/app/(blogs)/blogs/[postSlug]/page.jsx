@@ -6,7 +6,7 @@ import PostComment from "../_components/comment/PostComment";
 
 export async function generateStaticParams() {
   //in slug we have dynamic page, to make it static we use this function
-  const posts = await getPosts();
+  const {posts} = await getPosts();
   const slugs = posts.map((post) => ({ postSlug: post.slug }));
   return slugs;
 }
