@@ -24,7 +24,7 @@ async function Posts({ searchParams }) {
         <Pagination totalPages={totalPages} />
       </div>
     </div>
-  );//112
+  );
 }
 
 export default Posts;
