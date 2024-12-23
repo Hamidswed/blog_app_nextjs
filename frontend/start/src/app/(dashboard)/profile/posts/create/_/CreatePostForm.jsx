@@ -12,12 +12,42 @@ import Image from "next/image";
 import ButtonIcon from "@/ui/ButtonIcon";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import FileInput from "@/ui/FileInput";
+import Button from "@/ui/Button";
+import useCreatePost from "./useCreatePost";
+import { SpinnerMini } from "@/ui/Spinner";
+import { useRouter } from "next/navigation";
 
-const schema = yup.object();
+const schema = yup
+  .object({
+    title: yup
+      .string()
+      .min(5, "حداقل ۵ کاراکتر را وارد کنید")
+      .required("عنوان ضروری است"),
+    briefText: yup
+      .string()
+      .min(5, "حداقل ۱۰ کاراکتر را وارد کنید")
+      .required("توضیحات ضروری است"),
+    text: yup
+      .string()
+      .min(5, "حداقل ۱۰ کاراکتر را وارد کنید")
+      .required("توضیحات ضروری است"),
+    slug: yup.string().required("اسلاگ ضروری است"),
+    readingTime: yup
+      .number()
+      .positive()
+      .integer()
+      .required("زمان مطالعه ضروری است")
+      .typeError("یک عدد را وارد کنید"),
+    category: yup.string().required("دسته بندی ضروری است"),
+  })
+  .required();
 
 function CreatePostForm() {
   const { categories } = useCategories();
   const [coverImageUrl, setCoverImageUrl] = useState(null);
+  const { isCreating, createPost } = useCreatePost();
+
+  const router = useRouter();
 
   const {
     control,
@@ -31,8 +61,20 @@ function CreatePostForm() {
     resolver: yupResolver(schema),
   });
 
+  const onSubmit = (data) => {
+    const formData = new FormData();
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
+    createPost(formData, {
+      onSuccess: () => {
+        router.push("/profile/posts");
+      },
+    });
+  };
+
   return (
-    <form className="form">
+    <form className="form" onSubmit={handleSubmit(onSubmit)}>
       <RHFTextField
         name="title"
         label="عنوان"
@@ -85,6 +127,7 @@ function CreatePostForm() {
               type="file"
               label="انتخاب کاور پست"
               name="coverImage"
+              errors={errors}
               isRequired
               {...rest}
               value={value?.fileName}
@@ -118,6 +161,15 @@ function CreatePostForm() {
           </ButtonIcon>
         </div>
       )}
+      <div>
+        {isCreating ? (
+          <SpinnerMini />
+        ) : (
+          <Button type="submit" variant="primary" className="w-full">
+            تایید
+          </Button>
+        )}
+      </div>
     </form>
   );
 }
