@@ -6,7 +6,7 @@ import RHFTextField from "@/ui/RHFTextField";
 import TextField from "@/ui/TextField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as yup from "yup";
 import Image from "next/image";
 import ButtonIcon from "@/ui/ButtonIcon";
@@ -16,6 +16,8 @@ import Button from "@/ui/Button";
 import useCreatePost from "./useCreatePost";
 import { SpinnerMini } from "@/ui/Spinner";
 import { useRouter } from "next/navigation";
+import useEditPost from "./useEditPost";
+import { imageUrlToFile } from "@/utils/fileFormatter";
 
 const schema = yup
   .object({
@@ -42,10 +44,37 @@ const schema = yup
   })
   .required();
 
-function CreatePostForm() {
+function CreatePostForm({ postToEdit = {} }) {
+  const { _id: editId } = postToEdit;
+  const isEditSession = Boolean(editId);
+  const {
+    title,
+    text,
+    slug,
+    briefText,
+    readingTime,
+    category,
+    coverImage,
+    coverImageUrl: prevCoverImageUrl,
+  } = postToEdit;
+
+  let editValues = {};
+  if (isEditSession) {
+    editValues = {
+      title,
+      text,
+      slug,
+      briefText,
+      readingTime,
+      category: category._id,
+      coverImage,
+    };
+  }
+
   const { categories } = useCategories();
-  const [coverImageUrl, setCoverImageUrl] = useState(null);
+  const [coverImageUrl, setCoverImageUrl] = useState(prevCoverImageUrl || null);
   const { isCreating, createPost } = useCreatePost();
+  const { isUpdating, editPost } = useEditPost();
 
   const router = useRouter();
 
@@ -54,23 +83,47 @@ function CreatePostForm() {
     register,
     formState: { errors },
     handleSubmit,
-    reset,
     setValue,
+    reset,
   } = useForm({
     mode: "onTouched",
     resolver: yupResolver(schema),
+    defaultValues: editValues,
   });
+
+  //coverImage is a link but we need to have a file to submit the form so with this function we convert link to file.
+  useEffect(() => {
+    if (prevCoverImageUrl) {
+      async function fetchMyApi() {
+        const file = await imageUrlToFile(prevCoverImageUrl);
+        setValue("coverImage", file);
+      }
+      fetchMyApi();
+    }
+  }, [editId]);
 
   const onSubmit = (data) => {
     const formData = new FormData();
     for (const key in data) {
       formData.append(key, data[key]);
     }
-    createPost(formData, {
-      onSuccess: () => {
-        router.push("/profile/posts");
-      },
-    });
+    if (isEditSession) {
+      editPost(
+        { id: editId, data: formData },
+        {
+          onSuccess: () => {
+            reset();
+            router.push("/profile/posts");
+          },
+        }
+      );
+    } else {
+      createPost(formData, {
+        onSuccess: () => {
+          router.push("/profile/posts");
+        },
+      });
+    }
   };
 
   return (
